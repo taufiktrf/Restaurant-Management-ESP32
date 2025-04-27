@@ -1,4 +1,5 @@
-#Hardware Interface of the ESP32 for Bistro 92
+# Hardware Interface of the ESP32 for Bistro 92
+
 ![image](https://github.com/user-attachments/assets/83a51de6-58bc-4e5f-8bd6-b8a8072866a4)
 
 
