@@ -57,6 +57,75 @@ Describe one method to integrate the existing inventory system with Bistro 92’
 
 ---
 
+
+# Part B - Tech Tricks
+
+## Q1
+
+Design a database schema for Bistro 92 to track users, orders,
+menu items, tables, and payments, optimized for fast queries:
+- **Database Schema**  
+
+![Database Schema](Schema.png)  
+- **SQL Query**  
+
+```sql
+CREATE TABLE public."Orders"
+(
+	"ID" SERIAL PRIMARY KEY,
+    "OrderID" INTEGER NOT NULL,
+    "TableNo" INTEGER NOT NULL,
+    "Item" TEXT NOT NULL,
+    "Quantity" INTEGER NOT NULL,
+    "ConfirmedAt" TIMESTAMP,
+    "CompletedAt" TIMESTAMP
+);
+
+ALTER TABLE IF EXISTS public."Orders"
+    OWNER TO postgres;
+```  
+[Bistro 92 Database File](./Bistro%2092%Orders.sql)  
+
+
+  
+## Q2
+
+Write an SQL query to retrieve all orders from the last hour,
+including table number, items ordered, and order time, optimized for speed:
+ 
+- **SQL Query**  
+
+```sql
+SELECT *
+FROM public."Orders"
+WHERE "ConfirmedAt" >= (
+    SELECT MAX("ConfirmedAt")
+    FROM public."Orders"
+) - INTERVAL '1 hour';
+```
+
+## Q4
+Describe a cloud-based system architecture for real-time
+updates, data storage, and smart pad communication, ensuring low latency and
+high availability:
+ 
+- **Google Sheets**  
+
+Google Sheets offers extreme simplicity and zero initial infrastructure cost, making it accessible for prototyping or very small-scale use. Its familiar interface allows easy manual data viewing, editing, and basic visualization. Built-in collaboration features simplify sharing status. Google Apps Script enables some basic automation for handling incoming data or simple triggers, provided the volume and real-time requirements are very low. It requires minimal setup compared to dedicated cloud architecture.
+
+
+## Q5
+Design a real-time dashboard showing pending orders, average
+fulfillment time, and total sales, specifying tools and justifying your choices:
+ 
+- **Power BI Dashboard**  
+
+[Bistro 92 Dashboard](./Bistro%2092%20Dashboard.pbix)  
+- **Preview**  
+
+![Dashboard Preview](Bistro%2092%20Dashboard%20Sample.png) 
+
+
 # Part C - Interactive Nutrition and Allergen Information with Personalized Suggestion
 
 ## Case
@@ -96,71 +165,4 @@ Essential features:
 - **Minimized Risk of Allergic Reaction**: Reduces incidents and protects customer health.
 - **Healthy Dining**: Ensures safe, nutritious dining choices.
 - **Branding**: Enhances Bistro 92’s reputation for dependability and health-conscious offerings.
-
-
-
-# Part B - Tech Tricks
-
-## Q1
-
-Design a database schema for Bistro 92 to track users, orders,
-menu items, tables, and payments, optimized for fast queries:
-- **Database Schema**  
-
-![Database Schema](Schema.png)  
-- **SQL Query**  
-
-```sql
-CREATE TABLE public."Orders"
-(
-	"ID" SERIAL PRIMARY KEY,
-    "OrderID" INTEGER NOT NULL,
-    "TableNo" INTEGER NOT NULL,
-    "Item" TEXT NOT NULL,
-    "Quantity" INTEGER NOT NULL,
-    "ConfirmedAt" TIMESTAMP,
-    "CompletedAt" TIMESTAMP
-);
-
-ALTER TABLE IF EXISTS public."Orders"
-    OWNER TO postgres;
-```
-
-  
-## Q2
-
-Write an SQL query to retrieve all orders from the last hour,
-including table number, items ordered, and order time, optimized for speed:
- 
-- **SQL Query**  
-
-```sql
-SELECT *
-FROM public."Orders"
-WHERE "ConfirmedAt" >= (
-    SELECT MAX("ConfirmedAt")
-    FROM public."Orders"
-) - INTERVAL '1 hour';
-```
-
-## Q4
-Describe a cloud-based system architecture for real-time
-updates, data storage, and smart pad communication, ensuring low latency and
-high availability:
- 
-- **Google Sheets**  
-
-Google Sheets offers extreme simplicity and zero initial infrastructure cost, making it accessible for prototyping or very small-scale use. Its familiar interface allows easy manual data viewing, editing, and basic visualization. Built-in collaboration features simplify sharing status. Google Apps Script enables some basic automation for handling incoming data or simple triggers, provided the volume and real-time requirements are very low. It requires minimal setup compared to dedicated cloud architecture.
-
-
-## Q5
-Design a real-time dashboard showing pending orders, average
-fulfillment time, and total sales, specifying tools and justifying your choices:
- 
-- **Power BI Dashboard**  
-
-[Bistro 92 Dashboard](./Bistro%2092%20Dashboard.pbix)  
-- **Preview**  
-
-![Dashboard Preview](Bistro%2092%20Dashboard%20Sample.png) 
 
