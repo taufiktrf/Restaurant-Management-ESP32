@@ -1,6 +1,6 @@
 # Part A - Quick Fixes
 
-### Q1 (25 points)
+## Q1
 
 List three essential features Bistro 92’s system needs for customer satisfaction and efficient order processing:
 
@@ -12,7 +12,7 @@ List three essential features Bistro 92’s system needs for customer satisfacti
 
 ---
 
-### Q2 (25 points)
+## Q2
 
 Describe two design principles to make the smart pad interface intuitive for all users, including tech novices:
 
@@ -22,7 +22,7 @@ Describe two design principles to make the smart pad interface intuitive for all
 
 ---
 
-### Q3 (30 points)
+## Q3
 
 Identify three potential security vulnerabilities and one solution for each:
 
@@ -37,7 +37,7 @@ Identify three potential security vulnerabilities and one solution for each:
 
 ---
 
-### Q4 (30 points)
+## Q4
 
 Explain two strategies to keep Bistro 92’s system responsive and stable during peak hours:
 
@@ -47,7 +47,7 @@ Explain two strategies to keep Bistro 92’s system responsive and stable during
 
 ---
 
-### Q5 (40 points)
+## Q5
 
 Describe one method to integrate the existing inventory system with Bistro 92’s new system without disrupting operations:
 
@@ -59,11 +59,11 @@ Describe one method to integrate the existing inventory system with Bistro 92’
 
 # Part C - Interactive Nutrition and Allergen Information with Personalized Suggestion
 
-### Case
+## Case
 
 Customers are increasingly concerned about health and dietary needs, sometimes avoiding dining out due to fears of unsuitable meals. Uninformed ordering can lead to health issues and dissatisfaction.
 
-### Solution: Interactive Nutritional and Allergen Information with Personalized Suggestions
+## Solution: Interactive Nutritional and Allergen Information with Personalized Suggestions
 
 Essential features:
 
@@ -76,20 +76,20 @@ Essential features:
 
 ---
 
-### Technology
+## Technology
 
 - **Nutritionix API**: Fetch real-time, detailed nutritional and allergen information.
 - **Frontend**: Built with React for a highly interactive experience.
 - **Backend**: Cloud-based system to ensure real-time updates and synchronization.
 
-### Method
+## Method
 
 - The pad sends a request to the Nutritionix API.
 - The API responds with formatted nutritional and allergen data.
 
 ---
 
-### Benefits
+## Benefits
 
 - **Improved Customer Experience**: Higher satisfaction and engagement.
 - **Customer Retention**: Personalized attention encourages return visits.
@@ -101,7 +101,7 @@ Essential features:
 
 # Part B - Tech Tricks
 
-### Q1 (70 points)
+## Q1
 
 Design a database schema for Bistro 92 to track users, orders,
 menu items, tables, and payments, optimized for fast queries:
@@ -127,7 +127,7 @@ ALTER TABLE IF EXISTS public."Orders"
 ```
 
   
-### Q2 (80 points)
+## Q2
 
 Write an SQL query to retrieve all orders from the last hour,
 including table number, items ordered, and order time, optimized for speed:
@@ -142,3 +142,12 @@ WHERE "ConfirmedAt" >= (
     FROM public."Orders"
 ) - INTERVAL '1 hour';
 ```
+
+## Q4
+Describe a cloud-based system architecture for real-time
+updates, data storage, and smart pad communication, ensuring low latency and
+high availability:
+ 
+- **Google Sheets**  
+
+Google Sheets offers extreme simplicity and zero initial infrastructure cost, making it accessible for prototyping or very small-scale use. Its familiar interface allows easy manual data viewing, editing, and basic visualization. Built-in collaboration features simplify sharing status. Google Apps Script enables some basic automation for handling incoming data or simple triggers, provided the volume and real-time requirements are very low. It requires minimal setup compared to dedicated cloud architecture.
