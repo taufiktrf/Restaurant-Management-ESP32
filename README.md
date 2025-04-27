@@ -139,6 +139,92 @@ fulfillment time, and total sales, specifying tools and justifying your choices:
 ![Dashboard Preview](Bistro%2092%20Dashboard%20Sample.png) 
 
 
+
+# Part C - Bonus Boosters
+
+## Q2
+
+Enhance your API to support extreme scalability, processing
+numerous simultaneous orders without data loss, and explain your strategies:   
+
+### Database Optimization
+
+- **Indexing**: Used to optimize order values, improving query performance for order-related operations.
+
+- **Partitioning**: Partitioning is done in order to separate the orders by months of order. It’s done in order to process data more efficiently.  
+
+SQL
+```sql
+CREATE TABLE orders (
+    order_id serial PRIMARY KEY,
+    table_no INT,
+    item_id INT,
+    quantity INT,
+    order_time TIMESTAMP,
+    total_price DECIMAL
+) PARTITION BY RANGE (order_time);
+
+-- Create partitions for different months
+CREATE TABLE orders_jan_2025 PARTITION OF orders FOR VALUES FROM ('2025-01-01') TO ('2025-02-01');
+
+```
+
+
+### Horizontal Scaling
+- AWS elastic load balancing we can configure our application.
+- Auto scaling is done to automatically add more servers when the load increases
+- ELB Will route traffic to available instances
+
+### Distributed Caching
+- Caching helps to reduce the load on the database and improves the responsiveness of the system.
+- Ensure that the cache is updated when stock levels, order status, or other dynamic data changes.   
+
+Code
+```javascript
+const redis = require('redis');
+const client = redis.createClient();
+
+// Cache order details
+client.setex('order_123', 3600, JSON.stringify(orderData));
+```
+
+
+### Rate Limiting
+
+Rate limiting protects APIs from overload by restricting request volumes, ensuring stability and fairness. Use Redis for granular controls (IP/user tokens) and API gateways (AWS, Kong) for global request-per-second limits.  
+
+Terminal
+```
+npm install express-rate-limit
+```
+
+server.js
+``` javascript
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: "Too many requests, please try again later."
+});
+
+app.use(limiter);
+```
+
+### Asynchronous Processing
+Use message queues (RabbitMQ, Kafka, AWS SQS) to decouple order processing—API enqueues orders while workers handle them asynchronously. Deploy scalable worker pools (microservices/background workers) to process queue tasks independently. This keeps the API responsive and allows horizontal scaling for heavy workloads.  
+
+``` javascript
+amqp.connect('amqp://localhost', (err, connection) => {
+    connection.createChannel((err, channel) => {
+        const queue = 'order_queue';
+        const msg = JSON.stringify(orderData);
+        channel.assertQueue(queue, { durable: true });
+        channel.sendToQueue(queue, Buffer.from(msg), { persistent: true });
+    });
+});
+
+```
 # Part D - Interactive Nutrition and Allergen Information with Personalized Suggestion
 
 ## Case
