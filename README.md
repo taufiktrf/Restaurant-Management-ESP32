@@ -147,6 +147,8 @@ fulfillment time, and total sales, specifying tools and justifying your choices:
 
 # Part C - Bonus Boosters
 
+## The server code for this part is in the server.js file. Anyone who wants to implement the project should save these files in a specific directory, have node.js and Postman. 
+
 ## Q1
 
 ## Overview
