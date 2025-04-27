@@ -409,3 +409,9 @@ For the frontend interface, we can use React. This will make the frontend of the
 - **Minimized Risk of Allergic Reaction**: Many a time customers face instant allergic reactions due to the presence of allergenic items. It nullifies the total outing for them and also creates negative remarks about the restaurant among others.
 - **Healthy Dining**: Customers will not experience any health hazards due to the wrong choice of foods, which increases reliability.
 - **Branding**: Bistro 92 will have a good reputation in the food segment and can attract more customers for its dependability.
+- 
+
+
+# Hardware_Video
+Link: https://drive.google.com/file/d/18Ir_yfcNWj_jNOtFZIBdaUhyzWMLukE9/view?usp=sharing
+## As we have used the wokwi online platform as suggested by the organizers, we could not transmit the data to the cloud and hence the WEB id is kept as a pseudo one. If the same code and the project is uploaded to a phsyical ESP32 module it will perfectly work.
