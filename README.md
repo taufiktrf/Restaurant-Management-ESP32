@@ -414,4 +414,4 @@ For the frontend interface, we can use React. This will make the frontend of the
 
 # Hardware_Video
 Link: https://drive.google.com/file/d/18Ir_yfcNWj_jNOtFZIBdaUhyzWMLukE9/view?usp=sharing
-## As we have used the wokwi online platform as suggested by the organizers, we could not transmit the data to the cloud and hence the WEB id is kept as a pseudo one. If the same code and the project is uploaded to a phsyical ESP32 module it will perfectly work.
+### As we have used the 'Wokwi' online platform as suggested by the organizers, we could not transmit the data to the cloud and hence the WEB id is kept as a pseudo one. The data in the databases were assumed through probable calculations. If the same code and the project is uploaded to a phsyical ESP32 module it will perfectly work and be able to transmit data to google sheets. From there the operator will be able to use the data directly to databases and perform the necessary analysis.
