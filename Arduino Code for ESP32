@@ -1,0 +1,243 @@
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
+
+#define BUTTON1_PIN 15  
+#define BUTTON2_PIN 4   
+#define BUTTON3_PIN 5  
+#define BUTTON4_PIN 18 
+
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+
+const char* ssid = "Wokwi-GUEST";
+const char* password = "";
+
+int menuIndex = 0;
+int quantity = 1;
+String menuItems[] = {"1. Burger", "2. Pizza", "3. Pasta", "4. Salad", "5. Drink"};
+bool inMenu = true;
+bool inQuantityDialog = false;
+String cart = "";
+
+
+unsigned long pressStartTime = 0;
+bool button2LongPress = false;
+
+const char* googleScriptUrl = "https://script.google.com/macros/s/your_ID/exec"; // HERE THE USER HAVE TO ENTER HIS WEB ID FROM APPSCRIPT
+
+
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600, 60000);
+
+
+void setup() {
+
+  Serial.begin(115200);
+  WiFi.begin(ssid, password); 
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to WiFi!");
+  
+  pinMode(BUTTON1_PIN, INPUT_PULLUP);  
+  pinMode(BUTTON2_PIN, INPUT_PULLUP);
+  pinMode(BUTTON3_PIN, INPUT_PULLUP);
+  pinMode(BUTTON4_PIN, INPUT_PULLUP);
+  
+  // Initialize OLED display
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for (;;);  
+  }
+  
+  display.clearDisplay();
+  display.display();
+  delay(2000);  
+}
+
+void loop() {
+  handleButtonPresses();
+  if (inMenu) {
+    showMainMenu(); 
+  } else if (inQuantityDialog) {
+    openQuantityDialog(); 
+  }
+  delay(100);  
+}
+
+void handleButtonPresses() {
+ 
+  if (digitalRead(BUTTON1_PIN) == LOW) {  
+    delay(200);  
+    if (inQuantityDialog) {
+      resetOrder();
+    } else {
+      showMainMenu();
+    }
+  }
+
+  if (digitalRead(BUTTON2_PIN) == LOW) {  
+    delay(100);  
+
+
+    if (pressStartTime == 0) {
+      pressStartTime = millis();  
+    }
+
+
+    if (millis() - pressStartTime > 800) { 
+      if (!button2LongPress) {
+        button2LongPress = true;
+        finalizeOrder();  
+        return;  
+      }
+    }
+
+   
+    if (!button2LongPress) {
+      if (inQuantityDialog) {
+        addItemToCart();  
+      } else {
+        openQuantityDialog();
+      }
+    }
+  } else {
+    
+    if (button2LongPress) {
+      button2LongPress = false;  
+    }
+    pressStartTime = 0;  
+  }
+
+ 
+  if (digitalRead(BUTTON3_PIN) == LOW) { 
+    delay(200);  // Debounce delay
+    if (inQuantityDialog && quantity < 10) { 
+      quantity++;
+    } else if (!inQuantityDialog) {
+      menuIndex = (menuIndex > 0) ? menuIndex - 1 : 4; 
+    }
+  }
+
+ 
+  if (digitalRead(BUTTON4_PIN) == LOW) {  
+    delay(200);  // Debounce delay
+    if (inQuantityDialog && quantity > 1) { 
+      quantity--;
+    } else if (!inQuantityDialog) {
+      menuIndex = (menuIndex < 4) ? menuIndex + 1 : 0; 
+    }
+  }
+}
+
+void sendOrderToGoogleSheets(String cart) {
+  if (WiFi.status() == WL_CONNECTED) { 
+    HTTPClient http;
+    http.setTimeout(61000); 
+
+    String item = menuItems[menuIndex]; 
+    int quantity = ::quantity;  
+
+   
+    timeClient.update();
+    String formattedTime = timeClient.getFormattedTime();
+
+    
+    String jsonData = "{\"method\":\"append\", \"item\":\"" + item + "\", \"quantity\":" + String(quantity) +
+                      ", \"cart\":\"" + cart + "\", \"timestamp\":\"" + formattedTime + "\"}";
+
+   
+    http.begin(googleScriptUrl);
+    http.addHeader("Content-Type", "application/json");
+
+  
+    int httpResponseCode = http.POST(jsonData);
+
+   
+    if (httpResponseCode > 0) {
+      String response = http.getString();
+      Serial.println("Response: " + response);
+    } else {
+      Serial.println("Error sending POST request: " + String(httpResponseCode));
+    }
+
+
+    http.end();
+  } else {
+    Serial.println("Wi-Fi not connected!");
+  }
+}
+
+void finalizeOrder() {
+ 
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Order Finalized!");
+  display.println("Your cart: ");
+  display.println(cart);  
+  display.display();
+  delay(6000);  
+
+  sendOrderToGoogleSheets(cart);
+
+  resetOrder();  
+}
+
+void showMainMenu() {
+  inMenu = true;
+  inQuantityDialog = false;
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  
+  for (int i = 0; i < 5; i++) {
+    if (i == menuIndex) {
+      display.print("> ");
+    } else {
+      display.print("  ");
+    }
+    display.println(menuItems[i]);
+  }
+  
+  display.display();
+}
+
+void openQuantityDialog() {
+  inMenu = false;
+  inQuantityDialog = true;
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.println("Select Quantity:");
+  display.print("Quantity: ");
+  display.println(quantity);
+  display.display();
+}
+
+void addItemToCart() {
+  cart += menuItems[menuIndex] + " x" + String(quantity) + "\n";
+  inQuantityDialog = false;
+  showMainMenu();
+}
+
+void resetOrder() {
+  cart = "";
+  menuIndex = 0;
+  quantity = 1;
+  showMainMenu();
+}
