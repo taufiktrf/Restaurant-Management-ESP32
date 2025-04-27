@@ -84,7 +84,7 @@ CREATE TABLE public."Orders"
 ALTER TABLE IF EXISTS public."Orders"
     OWNER TO postgres;
 ```  
-[Bistro 92 Database File](./Bistro%2092%Orders.sql) 
+[Bistro 92 Database File](./Bistro%2092%20Orders.sql)
 
 
   
