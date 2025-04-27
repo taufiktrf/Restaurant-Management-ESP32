@@ -1,4 +1,4 @@
-# Internal hardware interface of the Smart ordering device
+# Internal hardware interface of the Smart ordering device for Bistro92
 
 ![image](https://github.com/user-attachments/assets/83a51de6-58bc-4e5f-8bd6-b8a8072866a4)
 
