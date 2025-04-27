@@ -142,6 +142,140 @@ fulfillment time, and total sales, specifying tools and justifying your choices:
 
 # Part C - Bonus Boosters
 
+## Q1
+
+## Overview
+This API is designed for **order placement** in a restaurant system, handling **high concurrency** without errors. The API allows users to create, retrieve, update, and delete orders while ensuring data consistency and preventing over-ordering through stock reservation.
+
+The API includes **rate limiting** to protect against abuse and supports **asynchronous stock validation** to handle multiple requests simultaneously.
+
+---
+
+## Endpoints
+
+### 1. POST /orders
+Creates a new order and performs concurrency control to ensure that the items ordered are available in stock before confirming the order.
+
+```json
+  {
+      "table_no": 1,
+      "items": [
+          {"item_id": 1, "quantity": 2},
+          {"item_id": 2, "quantity": 1}
+      ],
+      "total_price": 25.50
+  }
+```
+### Success Response
+
+When an order is successfully placed, the API will return the following response:
+
+```json
+{
+    "order_id": 1,
+    "status": "Order placed successfully",
+    "order_time": "2025-04-27T15:01:15.625Z"
+}
+```
+
+### Error Response
+
+If the stock for an item is insufficient, the API will return the following error response:
+
+```json
+{
+    "error": "Not enough stock for item Burger"
+}
+```
+
+### 2. GET /orders/{order_id}
+
+Retrieves the details of a specific order by order_id.
+
+### Request:
+- **URL**: http://localhost:3000/orders/{order_id}
+- **Method**: GET
+### Response (Success):
+
+If the order exists, the API will return the following response:
+
+```json
+{
+    "order_id": 1,
+    "table_no": 1,
+    "items": [
+        {"item_id": 1, "quantity": 2},
+        {"item_id": 2, "quantity": 1}
+    ],
+    "total_price": 25.50,
+    "order_time": "2025-04-27T10:00:00",
+    "status": "Pending"
+}
+```
+
+### Response (Error):
+
+If the order does not exist, the API will return the following error response:
+
+```json
+{
+    "error": "Order not found"
+}
+```
+
+### 3. PUT /orders/{order_id}
+
+Updates an existing order, allowing modification of items, prices, or status. It also ensures that the requested items are still in stock before applying the changes.
+
+### Request Body (JSON):
+
+The request body should contain the updated items, total price, and order status. Here's an example:
+
+```json
+{
+    "items": [
+        {"item_id": 1, "quantity": 3}
+    ],
+    "total_price": 30.00,
+    "status": "Completed"
+}
+```
+### Response (Success):
+
+If the order is updated successfully, the API will return the following response:
+
+```json
+{
+    "order_id": 1,
+    "status": "Order updated successfully",
+    "order_time": "2025-04-27T15:03:02.726Z"
+}
+```
+### Response (Error):
+
+If there is not enough stock for an item, the API will return the following error response:
+
+```json
+{
+    "error": "Not enough stock for item Burger"
+}
+```
+
+# How to Run the API
+
+## 1. Install Dependencies
+
+After cloning or creating your project directory, run the following command to install the required dependencies:
+
+```bash
+npm install express express-rate-limit
+```
+
+# Conclusion
+
+This API supports order placement while handling high concurrency using stock reservation and optimistic concurrency control. It also ensures protection against abuse with rate limiting. By using asynchronous stock validation, we can ensure data integrity without blocking the system, making it more responsive under load.
+
+
 ## Q2
 
 Enhance your API to support extreme scalability, processing
@@ -267,4 +401,3 @@ For the frontend interface, we can use React. This will make the frontend of the
 - **Minimized Risk of Allergic Reaction**: Many a time customers face instant allergic reactions due to the presence of allergenic items. It nullifies the total outing for them and also creates negative remarks about the restaurant among others.
 - **Healthy Dining**: Customers will not experience any health hazards due to the wrong choice of foods, which increases reliability.
 - **Branding**: Bistro 92 will have a good reputation in the food segment and can attract more customers for its dependability.
-
