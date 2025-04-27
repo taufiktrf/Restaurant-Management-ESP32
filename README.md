@@ -57,7 +57,7 @@ Describe one method to integrate the existing inventory system with Bistro 92’
 
 ---
 
-## Part C - Interactive Nutrition and Allergen Information with Personalized Suggestion
+# Part C - Interactive Nutrition and Allergen Information with Personalized Suggestion
 
 ### Case
 
@@ -96,3 +96,32 @@ Essential features:
 - **Minimized Risk of Allergic Reaction**: Reduces incidents and protects customer health.
 - **Healthy Dining**: Ensures safe, nutritious dining choices.
 - **Branding**: Enhances Bistro 92’s reputation for dependability and health-conscious offerings.
+
+
+
+# Part B - Tech Tricks
+
+### Q1 (70 points)
+
+Design a database schema for Bistro 92 to track users, orders,
+menu items, tables, and payments, optimized for fast queries:
+- **Database Schema**  
+
+![Database Schema](Schema.png)  
+- **SQL Query**  
+
+```sql
+CREATE TABLE public."Orders"
+(
+	"ID" SERIAL PRIMARY KEY,
+    "OrderID" INTEGER NOT NULL,
+    "TableNo" INTEGER NOT NULL,
+    "Item" TEXT NOT NULL,
+    "Quantity" INTEGER NOT NULL,
+    "ConfirmedAt" TIMESTAMP,
+    "CompletedAt" TIMESTAMP
+);
+
+ALTER TABLE IF EXISTS public."Orders"
+    OWNER TO postgres;
+```
