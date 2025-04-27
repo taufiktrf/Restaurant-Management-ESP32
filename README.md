@@ -151,3 +151,16 @@ high availability:
 - **Google Sheets**  
 
 Google Sheets offers extreme simplicity and zero initial infrastructure cost, making it accessible for prototyping or very small-scale use. Its familiar interface allows easy manual data viewing, editing, and basic visualization. Built-in collaboration features simplify sharing status. Google Apps Script enables some basic automation for handling incoming data or simple triggers, provided the volume and real-time requirements are very low. It requires minimal setup compared to dedicated cloud architecture.
+
+
+## Q5
+Design a real-time dashboard showing pending orders, average
+fulfillment time, and total sales, specifying tools and justifying your choices:
+ 
+- **Power BI Dashboard**  
+
+[Bistro 92 Dashboard](./Bistro%2092%20Dashboard.pbix)  
+- **Preview**  
+
+![Dashboard Preview](Bistro%2092%20Dashboard%20Sample.png) 
+
