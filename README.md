@@ -125,3 +125,20 @@ CREATE TABLE public."Orders"
 ALTER TABLE IF EXISTS public."Orders"
     OWNER TO postgres;
 ```
+
+  
+### Q2 (80 points)
+
+Write an SQL query to retrieve all orders from the last hour,
+including table number, items ordered, and order time, optimized for speed:
+ 
+- **SQL Query**  
+
+```sql
+SELECT *
+FROM public."Orders"
+WHERE "ConfirmedAt" >= (
+    SELECT MAX("ConfirmedAt")
+    FROM public."Orders"
+) - INTERVAL '1 hour';
+```
