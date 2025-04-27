@@ -261,9 +261,9 @@ If there is not enough stock for an item, the API will return the following erro
 }
 ```
 
-# How to Run the API
+## How to Run the API
 
-## 1. Install Dependencies
+### 1. Install Dependencies
 
 After cloning or creating your project directory, run the following command to install the required dependencies:
 
@@ -271,6 +271,14 @@ After cloning or creating your project directory, run the following command to i
 npm install express express-rate-limit
 ```
 
+### 2. Start the server
+Run the following command to start the server
+```bash
+Copy
+Edit
+node server.js
+```
+Access the API: The server will run on http://localhost:3000. Use Postman or any HTTP client to interact with the API.
 # Conclusion
 
 This API supports order placement while handling high concurrency using stock reservation and optimistic concurrency control. It also ensures protection against abuse with rate limiting. By using asynchronous stock validation, we can ensure data integrity without blocking the system, making it more responsive under load.
